@@ -1,9 +1,15 @@
 from flask import Flask, render_template, request
 import requests
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 
-API_KEY = '24d97746da0f44a4feca49d2'
+
+load_dotenv()
+
+
+API_KEY = os.getenv('API_KEY')
 
 @app.route('/')
 def index():
