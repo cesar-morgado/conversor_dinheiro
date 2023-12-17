@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversor de Moedas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #5cb85c; /* Cor de fundo verde */
+            color: white;
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select,
+        input[type="number"],
+        button {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .resultado {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        p {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <form action="/converter" method="post">
+        <h1>Conversor de Moedas</h1>
+        <select name="moeda_de">
+            <option value="USD">Dólar Americano (USD)</option>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="GBP">Libra Esterlina (GBP)</option>
+            <option value="JPY">Iene Japonês (JPY)</option>
+            <option value="CAD">Dólar Canadense (CAD)</option>
+            <option value="AUD">Dólar Australiano (AUD)</option>
+            <option value="CHF">Franco Suíço (CHF)</option>
+            <option value="CNY">Yuan Chinês (CNY)</option>
+            <option value="INR">Rupia Indiana (INR)</option>
+            <option value="BRL">Real Brasileiro (BRL)</option>
+            <!-- Adicione outras moedas conforme necessário -->
+        </select>
+        <select name="moeda_para">
+            <option value="USD">Dólar Americano (USD)</option>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="GBP">Libra Esterlina (GBP)</option>
+            <option value="JPY">Iene Japonês (JPY)</option>
+            <option value="CAD">Dólar Canadense (CAD)</option>
+            <option value="AUD">Dólar Australiano (AUD)</option>
+            <option value="CHF">Franco Suíço (CHF)</option>
+            <option value="CNY">Yuan Chinês (CNY)</option>
+            <option value="INR">Rupia Indiana (INR)</option>
+            <option value="BRL">Real Brasileiro (BRL)</option>
+            <!-- Adicione outras moedas conforme necessário -->
+        </select>
+        <input type="number" name="quantidade" placeholder="Quantidade">
+        <button type="submit">Converter</button>
+    </form>
+    {% if resultado %}
+        <div class="resultado">
+            <p>O resultado da conversão é: {{ resultado }}</p>
+        </div>
+    {% elif erro %}
+        <p>{{ erro }}</p>
+    {% endif %}
+</body>
+</html>
