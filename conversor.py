@@ -1,36 +1,49 @@
 from flask import Flask, render_template, request
-import requests
 from dotenv import load_dotenv
 import os
+import requests
 
 app = Flask(__name__)
 
+load_dotenv()  # Carregar variáveis de ambiente do arquivo .env
 
-load_dotenv()
+API_KEY = os.getenv('API_KEY')  # Acessar a variável de ambiente
 
+traducoes_clima = {
+    'clear sky': 'céu limpo',
+    'few clouds': 'algumas nuvens',
+    'scattered clouds': 'nuvens dispersas',
+    'broken clouds': 'nuvens quebradas',
+    'shower rain': 'chuva',
+    # Adicione outras traduções conforme necessário
+}
 
-API_KEY = os.getenv('API_KEY')
+def obter_previsao_tempo(cidade, api_key):
+    url = f'http://api.openweathermap.org/data/2.5/weather?q={cidade}&appid={api_key}&units=metric'
+    resposta = requests.get(url)
+    dados = resposta.json()
+
+    if resposta.status_code == 200:
+        clima = dados['weather'][0]['description']
+        if clima in traducoes_clima:
+            clima_traduzido = traducoes_clima[clima]
+        else:
+            clima_traduzido = clima
+        temperatura = dados['main']['temp']
+        return f'O tempo em {cidade} está {clima_traduzido} com temperatura de {temperatura}°C.'
+    else:
+        return 'Não foi possível obter a previsão do tempo.'
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/converter', methods=['POST'])
-def converter():
-    moeda_de = request.form['moeda_de']
-    moeda_para = request.form['moeda_para']
-    quantidade = float(request.form['quantidade'])
+@app.route('/previsao_tempo', methods=['POST'])
+def previsao_tempo():
+    cidade = request.form['cidade']
 
-    url = f'https://v6.exchangerate-api.com/v6/{API_KEY}/latest/{moeda_de}'
-    response = requests.get(url)
-
-    if response.status_code == 200:
-        data = response.json()
-        taxa = data['conversion_rates'][moeda_para]
-        resultado = quantidade * taxa
-        return render_template('index.html', resultado=resultado)
-    else:
-        return render_template('index.html', erro="Erro ao converter moeda.")
+    resultado = obter_previsao_tempo(cidade, API_KEY)
+    return render_template('index.html', resultado=resultado)
 
 if __name__ == '__main__':
     app.run(debug=True)
